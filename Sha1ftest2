@@ -1,0 +1,29 @@
+#!/bin/bash
+
+
+function iterate () {
+	local dir="$1"
+	# echo "$dir"
+
+	for file in "$dir"/*; do
+		if [ -f "$file" ]; then
+			fileput "$file"
+		fi
+
+		if [ -d "$file" ]; then
+			iterate "$file"
+		fi
+	done
+}
+
+function fileput () {
+	local sentFile="$1"
+	local shap1=$(sha1sum "$sentFile" | cut -d ' ' -f 1)
+	echo "$shap1","$sentFile" >> /home/jason/bScripts/output.csv
+}
+
+read -p "Input a directory: " -r directory
+iterate "$directory"
+
+
+

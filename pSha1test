@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# file="/home/jason/Desktop/test/IMG_0412.jpg" ## Saves the file path to 'file' variable
+# echo $file ## Prints the file name to the terminal
+
+# echo $(sha1sum $file) | cut -d ' ' -f 1 ## Prints the sha1 hash to the terminal, omits the file name which is part of the sha1sum command
+
+# exec xdg-open $file ## Alterante method to open the image in ImageViewer
+
+# eog $file & ## Open the image saved to $file in ImageViewer, the '&' at the end allows continued interaction with the terminal
+# sleep 1 ## Tells the code execution to pause for 1 second
+
+# read -p "Do you want to keep this photo? " -r choice  ## Asks user if they want the photo 
+# echo $choice ## prints the response to previoud question to the terminal
+
+# eog --single-window "/home/jason/Desktop/test/IMG_0440.JPG" ## opens the second image into the same instance of ImageViewer as the first
+
+# ls | wc -l ## Count the numbers of files in a directory
+#
+## This is a simple d0 {for} loop to get the sha1 has of files in a directory
+# for f in /home/jason/Desktop/test/*
+# do
+# 	if [ -f "$f" ]; then
+# 		echo $(sha1sum "$f")
+# 	fi
+# done
+
+read -p "What directory do you want to look at? " -r directory
+#directory="/home/jason/Desktop/test"
+#echo "$directory"
+function iterate () {
+	local dir="$1"
+
+	for file in "$dir"/*; do
+		if [ -f "$file" ]; then
+			local shap1=$(sha1sum "$file" | cut -d ' ' -f 1)
+			# echo "$shap1","$file"
+			echo "$shap1","$file" >> /home/jason/bScripts/output.csv
+		fi
+
+		if [ -d "$file" ]; then
+			iterate "$file"
+		fi
+	done
+}
+
+iterate "$directory"
+
+
+
